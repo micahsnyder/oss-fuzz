@@ -24,10 +24,10 @@ rm -rf ${WORK}/build
 mkdir -p ${WORK}/build
 cd ${WORK}/build
 
-if [ -f "${SRC}/clamav-devel/autogen.sh" ]
+if [ -f "${SRC}/clamav/autogen.sh" ]
 then
-    /bin/chmod +x ${SRC}/clamav-devel/autogen.sh
-    ${SRC}/clamav-devel/autogen.sh
+    /bin/chmod +x ${SRC}/clamav/autogen.sh
+    ${SRC}/clamav/autogen.sh
 fi
 
 # Remove ltdl so clamav build doesn't detect it and add it as a dependency.
@@ -36,12 +36,16 @@ apt remove -y libtool libltdl-dev libltdl7
 #
 # Run ./configure
 #
+ln -s /usr/lib/x86_64-linux-gnu/libcrypto.so /usr/lib/libcrypto.so
+ln -s /usr/lib/x86_64-linux-gnu/libssl.so /usr/lib/libssl.so
+export CLAMAV_DEPENDENCIES=/mussels/install
 ac_cv_c_mmap_anonymous=no \
-    ${SRC}/clamav-devel/configure \
+    ${SRC}/clamav/configure \
         --disable-mempool \
         --enable-fuzz=yes \
         --with-libjson=no \
         --with-pcre=no \
+        --with-xml=no \
         --enable-static=yes \
         --enable-shared=no \
         --disable-llvm \
